@@ -29,11 +29,7 @@ jobs:
       run: curl -L ${{ steps.download_release.outputs.download_url }} -o release.zip
 
     - name: Unzip release
-      shell: pwsh
-      run: |
-        $zipPath = Join-Path $PWD 'release.zip'
-        $destinationPath = Join-Path $PWD 'bin'
-        Expand-Archive -Path $zipPath -DestinationPath $destinationPath
+      run: Expand-Archive -Path release.zip -DestinationPath bin
 
     - name: Store data in JSON files
       run: |
