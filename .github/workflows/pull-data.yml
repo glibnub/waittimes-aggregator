@@ -27,10 +27,12 @@ jobs:
 
     - name: Download release asset
       run: |
-        curl -L -H "Accept: application/octet-stream" `
-             -H "Authorization: token ${{ secrets.WAITTIMES_TOOL_REPO_TOKEN }}" `
-             "${{ steps.fetch_latest_release.outputs.download_url }}" `
-             -o release.zip
+        $url = "${{ steps.fetch_latest_release.outputs.download_url }}"
+        $headers = @{
+          "Accept" = "application/octet-stream"
+          "Authorization" = "token ${{ secrets.WAITTIMES_TOOL_REPO_TOKEN }}"
+        }
+        Invoke-RestMethod -Uri $url -Headers $headers -OutFile "release.zip"
 
     - name: List files
       run: |
