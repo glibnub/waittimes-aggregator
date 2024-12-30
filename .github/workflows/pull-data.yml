@@ -28,6 +28,10 @@ jobs:
     - name: Download release asset
       run: curl -L ${{ steps.download_release.outputs.download_url }} -o release.zip
 
+    - name: List files
+      run: |
+        Get-ChildItem -File | ForEach-Object { "$($_.Name): $($_.Length) bytes" }
+
     - name: Unzip release
       run: Expand-Archive -Path release.zip -DestinationPath bin
 
