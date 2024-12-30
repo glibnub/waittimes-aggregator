@@ -1,0 +1,87 @@
+name: Windows GitHub Action Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Download latest release
+      id: download_release
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const latestRelease = await github.rest.repos.getLatestRelease({
+            owner: 'OpenSpartan',
+            repo: 'waittimes'
+          });
+          const asset = latestRelease.data.assets[0]; // Assuming the asset is the first in the list
+          const downloadUrl = asset.browser_download_url;
+          core.setOutput('download_url', downloadUrl);
+
+    - name: Download release asset
+      run: curl -L ${{ steps.download_release.outputs.download_url }} -o release.zip
+
+    - name: Unzip release
+      run: Expand-Archive -Path release.zip -DestinationPath ./bin
+
+    - name: Store data in JSON files
+      run: |
+        $secrets = @{
+          'at' = $env.SEC_AT
+          'xt' = $env.SEC_XT
+          'dt' = $env.SEC_DT
+        }
+
+        if ($secrets.at) {
+          $secrets.at | ConvertTo-Json | Out-File -FilePath ./bin/access_tokens.json
+        }
+
+        if ($secrets.xt) {
+          $secrets.xt | ConvertTo-Json | Out-File -FilePath ./bin/xbox_tokens.json
+        }
+
+        if ($secrets.dt) {
+          $secrets.dt | ConvertTo-Json | Out-File -FilePath ./bin/device_token.json
+        }
+      env:
+        SEC_AT: ${{ secrets.ACCESS_TOKENS }}
+        SEC_XT: ${{ secrets.XBOX_TOKENS }}
+        SEC_DT: ${{ secrets.DEVICE_TOKEN }}
+
+    - name: Clone data repository
+      run: git clone https://github.com/OpenSpartan/waittimes-datasets.git ./data
+
+    - name: Create dev branch if it does not exist
+      run: |
+        cd ./data
+        git checkout -b dev || git checkout dev
+
+    - name: Run tool with parameters
+      run: ./bin/WaitTimes.exe --build-id 261084.24.11.18.1712-0 --release 1.9 --release-marker hi_1_9_0 --database ./data/datasets/snowbound-wait-times.db --user-agent "SHIVA-2043073184/6.10025.17697.0 (release; PC)"
+
+    - name: Commit and push changes
+      run: |
+        cd ./data-repo
+        git config --global user.email "33675759+glibnub@users.noreply.github.com. "
+        git config --global user.name "Glibnub"
+        git add .
+        git commit -m "Glibnub decided that you need more data."
+        git push origin dev
+
+    - name: Update secrets
+      run: |
+        $file_at = Get-Content -Path ./bin/access_tokens.json
+        $file_xt = Get-Content -Path ./bin/xbox_tokens.json
+        $file_dt = Get-Content -Path ./bin/device_token.json
+
+        gh secret set ACCESS_TOKENS -b"$file_at"
+        gh secret set XBOX_TOKENS -b"$file_xt"
+        gh secret set DEVICE_TOKEN -b"$file_dt"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
