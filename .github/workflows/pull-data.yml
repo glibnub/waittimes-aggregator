@@ -23,6 +23,7 @@ jobs:
           const asset = latestRelease.data.assets[0]; // Assuming the asset is the first in the list
           const downloadUrl = asset.browser_download_url;
           core.setOutput('download_url', downloadUrl);
+        github-token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Download release asset
       run: curl -L ${{ steps.download_release.outputs.download_url }} -o release.zip
