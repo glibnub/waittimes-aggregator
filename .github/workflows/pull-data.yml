@@ -23,7 +23,7 @@ jobs:
           const asset = latestRelease.data.assets[0]; // Assuming the asset is the first in the list
           const downloadUrl = asset.browser_download_url;
           core.setOutput('download_url', downloadUrl);
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ secrets.WAITTIMES_TOOL_REPO_TOKEN }}
 
     - name: Download release asset
       run: curl -L ${{ steps.download_release.outputs.download_url }} -o release.zip
@@ -69,11 +69,14 @@ jobs:
     - name: Commit and push changes
       run: |
         cd ./data-repo
-        git config --global user.email "33675759+glibnub@users.noreply.github.com. "
+        git config --global user.email "33675759+glibnub@users.noreply.github.com"
         git config --global user.name "Glibnub"
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/yourusername/data-repository.git
         git add .
         git commit -m "Glibnub decided that you need more data."
         git push origin dev
+      env:
+        GITHUB_TOKEN: ${{ secrets.WAITTIMES_DATASETS_REPO_TOKEN }}
 
     - name: Update secrets
       run: |
@@ -85,4 +88,4 @@ jobs:
         gh secret set XBOX_TOKENS -b"$file_xt"
         gh secret set DEVICE_TOKEN -b"$file_dt"
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.WAITTIMES_AGGREGATOR_SECRETS_GENERATOR }}
