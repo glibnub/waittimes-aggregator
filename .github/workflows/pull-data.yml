@@ -15,6 +15,7 @@ jobs:
       id: download_release
       uses: actions/github-script@v6
       with:
+        github-token: ${{ secrets.WAITTIMES_TOOL_REPO_TOKEN }}
         script: |
           const latestRelease = await github.rest.repos.getLatestRelease({
             owner: 'OpenSpartan',
@@ -23,11 +24,10 @@ jobs:
           const asset = latestRelease.data.assets[0]; // Assuming the asset is the first in the list
           const downloadUrl = asset.browser_download_url;
           core.setOutput('download_url', downloadUrl);
-        github-token: ${{ secrets.WAITTIMES_TOOL_REPO_TOKEN }}
 
     - name: Download release asset
       run: |
-        $url = "${{ steps.fetch_latest_release.outputs.download_url }}"
+        $url = "${{ steps.download_release.outputs.download_url }}"
         $headers = @{
           "Accept" = "application/octet-stream"
           "Authorization" = "token ${{ secrets.WAITTIMES_TOOL_REPO_TOKEN }}"
