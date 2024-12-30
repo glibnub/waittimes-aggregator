@@ -26,7 +26,11 @@ jobs:
         github-token: ${{ secrets.WAITTIMES_TOOL_REPO_TOKEN }}
 
     - name: Download release asset
-      run: curl -L ${{ steps.download_release.outputs.download_url }} -o release.zip
+      run: |
+        curl -L -H "Accept: application/octet-stream" \
+             -H "Authorization: token ${{ secrets.WAITTIMES_TOOL_REPO_TOKEN }}" \
+             "${{ steps.fetch_latest_release.outputs.download_url }}" \
+             -o release.zip
 
     - name: List files
       run: |
