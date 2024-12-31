@@ -51,6 +51,10 @@ jobs:
         ${{ secrets.DEVICE_TOKEN }}
         EOF
 
+    - name: TEST-DEBUG-PRINT-DEVICE-TOKEN
+      run: |
+        cat ./bin/device_token.json
+
     - name: Clone data repository
       run: git clone https://github.com/OpenSpartan/waittimes-datasets.git ./data
 
