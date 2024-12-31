@@ -12,13 +12,13 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Download latest release asset
-      shell: pwsh
       env:
         GITHUB_TOKEN: ${{ secrets.WAITTIMES_TOOL_REPO_TOKEN }}
       run: |
         $release = gh release view --repo OpenSpartan/waittimes --json assets
         $releaseUrl = ($release | ConvertFrom-Json).assets[0].url
-        Invoke-WebRequest -Uri $releaseUrl -Headers @{ Authorization = "Bearer $env:WAITTIMES_TOOL_REPO_TOKEN" } -OutFile release.zip
+        Write-Host $releaseUrl
+        Invoke-WebRequest -Uri $releaseUrl -Headers @{ Authorization = "Bearer $env:GITHUB_TOKEN" } -OutFile release.zip
 
     - name: List files
       run: |
