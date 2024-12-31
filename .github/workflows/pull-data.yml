@@ -57,9 +57,11 @@ jobs:
     - name: Create dev branch if it does not exist
       run: |
         cd ./data
+        git fetch origin
+
         echo "Checking if the 'dev' branch exists..."
         
-        if git rev-parse --verify dev; then
+        if git rev-parse --verify origin/dev; then
           echo "'dev' branch exists. Checking out the 'dev' branch..."
           git checkout dev
           echo "Pulling the latest changes from 'origin/dev'..."
