@@ -67,7 +67,7 @@ jobs:
         cd ./data
         git config --global user.email "33675759+glibnub@users.noreply.github.com"
         git config --global user.name "Glibnub"
-        git remote set-url origin https://github.com/OpenSpartan/waittimes-datasets.git
+        git remote set-url origin https://$GITHUB_TOKEN@github.com/OpenSpartan/waittimes-datasets.git
         git add .
         git commit -m "Glibnub decided that you need more data."
         git push origin dev
