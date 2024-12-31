@@ -80,8 +80,8 @@ jobs:
         file_xt=$(cat ./bin/xbox_tokens.json)
         file_dt=$(cat ./bin/device_token.json)
 
-        gh secret set ACCESS_TOKENS -b"$file_at"
-        gh secret set XBOX_TOKENS -b"$file_xt"
-        gh secret set DEVICE_TOKEN -b"$file_dt"
+        gh secret set ACCESS_TOKENS -b"$(echo -n "$file_at" | base64)"
+        gh secret set XBOX_TOKENS -b"$(echo -n "$file_xt" | base64)"
+        gh secret set DEVICE_TOKEN -b"$(echo -n "$file_dt" | base64)"
       env:
         GITHUB_TOKEN: ${{ secrets.WAITTIMES_AGGREGATOR_SECRETS_GENERATOR }}
