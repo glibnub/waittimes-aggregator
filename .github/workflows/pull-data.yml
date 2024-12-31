@@ -18,7 +18,7 @@ jobs:
       run: |
         $release = gh release view --repo OpenSpartan/waittimes --json assets
         $releaseUrl = ($release | ConvertFrom-Json).assets[0].url
-        gh api $releaseUrl --method GET -H "Accept: application/octet-stream" > release.zip
+        Invoke-WebRequest -Uri $releaseUrl -Headers @{ Authorization = "Bearer $env:WAITTIMES_TOOL_REPO_TOKEN" } -OutFile release.zip
 
     - name: List files
       run: |
