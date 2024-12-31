@@ -11,28 +11,12 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Download latest release
-      id: download_release
-      uses: actions/github-script@v6
-      with:
-        github-token: ${{ secrets.WAITTIMES_TOOL_REPO_TOKEN }}
-        script: |
-          const latestRelease = await github.rest.repos.getLatestRelease({
-            owner: 'OpenSpartan',
-            repo: 'waittimes'
-          });
-          const asset = latestRelease.data.assets[0]; // Assuming the asset is the first in the list
-          const downloadUrl = asset.browser_download_url;
-          core.setOutput('download_url', downloadUrl);
-
-    - name: Download release asset
+    - name: Download latest release asset
+      env:
+        GITHUB_TOKEN: ${{ secrets.WAITTIMES_TOOL_REPO_TOKEN }}
       run: |
-        $url = "${{ steps.download_release.outputs.download_url }}"
-        $headers = @{
-          "Accept" = "application/octet-stream"
-          "Authorization" = "token ${{ secrets.WAITTIMES_TOOL_REPO_TOKEN }}"
-        }
-        Invoke-RestMethod -Uri $url -Headers $headers -OutFile "release.zip"
+        $releaseUrl = gh release view latest --repo OpenSpartan/waittimes --json assets --jq ".assets[0].url"
+        gh api $releaseUrl --method GET -H "Accept: application/octet-stream" --output release.zip
 
     - name: List files
       run: |
