@@ -16,8 +16,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.WAITTIMES_TOOL_REPO_TOKEN }}
       run: |
-        $releaseUrl = gh release view latest --repo OpenSpartan/waittimes --json assets --jq ".assets[0].url"
-        Write-Host "The release URL is: $releaseUrl"
+        $release = gh release view --repo OpenSpartan/waittimes --json assets
+        $releaseUrl = ($release | ConvertFrom-Json).assets[0].url
         gh api $releaseUrl --method GET -H "Accept: application/octet-stream" > release.zip
 
     - name: List files
