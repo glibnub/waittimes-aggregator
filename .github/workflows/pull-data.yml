@@ -12,11 +12,13 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Download latest release asset
+      shell: pwsh
       env:
         GITHUB_TOKEN: ${{ secrets.WAITTIMES_TOOL_REPO_TOKEN }}
       run: |
         $releaseUrl = gh release view latest --repo OpenSpartan/waittimes --json assets --jq ".assets[0].url"
-        gh api $releaseUrl --method GET -H "Accept: application/octet-stream" --output release.zip
+        Write-Host "The release URL is: $releaseUrl"
+        gh api $releaseUrl --method GET -H "Accept: application/octet-stream" > release.zip
 
     - name: List files
       run: |
