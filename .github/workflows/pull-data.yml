@@ -34,21 +34,18 @@ jobs:
         unzip openspartan-waittimes.zip -d bin
 
     - name: Write access tokens to file
-      if: ${{ secrets.ACCESS_TOKENS != '' }}
       run: |
         cat << EOF > ./bin/access_tokens.json
         ${{ secrets.ACCESS_TOKENS }}
         EOF
 
     - name: Write Xbox tokens to file
-      if: ${{ secrets.XBOX_TOKENS != '' }}
       run: |
         cat << EOF > ./bin/xbox_tokens.json
         ${{ secrets.XBOX_TOKENS }}
         EOF
 
     - name: Write device token to file
-      if: ${{ secrets.DEVICE_TOKEN != '' }}
       run: |
         cat << EOF > ./bin/device_token.json
         ${{ secrets.DEVICE_TOKEN }}
