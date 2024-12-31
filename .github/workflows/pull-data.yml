@@ -15,10 +15,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.WAITTIMES_TOOL_REPO_TOKEN }}
       run: |
-        $release = gh release view --repo OpenSpartan/waittimes --json assets
-        $releaseUrl = ($release | ConvertFrom-Json).assets[0].url
-        Write-Host $releaseUrl
-        gh release download --pattern 'openspartan-waittimes.zip' --output openspartan-waittimes.zip
+        gh release download --repo OpenSpartan/waittimes --pattern 'openspartan-waittimes.zip' --output openspartan-waittimes.zip
 
     - name: List files
       run: |
