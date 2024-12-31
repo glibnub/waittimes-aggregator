@@ -33,31 +33,26 @@ jobs:
       run: |
         unzip openspartan-waittimes.zip -d bin
 
-    - name: Write secret to file
+    - name: Write access tokens to file
+      if: ${{ secrets.ACCESS_TOKENS != '' }}
       run: |
         cat << EOF > ./bin/access_tokens.json
         ${{ secrets.ACCESS_TOKENS }}
         EOF
 
-    - name: Write Xbox tokens to file (if exists)
+    - name: Write Xbox tokens to file
+      if: ${{ secrets.XBOX_TOKENS != '' }}
       run: |
-        if [ -n "${{ secrets.XBOX_TOKENS }}" ]; then
-          cat << EOF > ./bin/xbox_tokens.json
-          ${{ secrets.XBOX_TOKENS }}
-          EOF
-        else
-          echo "XBOX_TOKENS is empty, not writing to file."
-        fi
+        cat << EOF > ./bin/xbox_tokens.json
+        ${{ secrets.XBOX_TOKENS }}
+        EOF
 
-    - name: Write device token to file (if exists)
+    - name: Write device token to file
+      if: ${{ secrets.DEVICE_TOKEN != '' }}
       run: |
-        if [ -n "${{ secrets.DEVICE_TOKEN }}" ]; then
-          cat << EOF > ./bin/device_token.json
-          ${{ secrets.DEVICE_TOKEN }}
-          EOF
-        else
-          echo "DEVICE_TOKEN is empty, not writing to file."
-        fi
+        cat << EOF > ./bin/device_token.json
+        ${{ secrets.DEVICE_TOKEN }}
+        EOF
 
     - name: Clone data repository
       run: git clone https://github.com/OpenSpartan/waittimes-datasets.git ./data
