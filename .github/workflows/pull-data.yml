@@ -57,12 +57,21 @@ jobs:
     - name: Create dev branch if it does not exist
       run: |
         cd ./data
+        echo "Checking if the 'dev' branch exists..."
+        
         if git rev-parse --verify dev; then
+          echo "'dev' branch exists. Checking out the 'dev' branch..."
           git checkout dev
+          echo "Pulling the latest changes from 'origin/dev'..."
           git pull origin dev
         else
+          echo "'dev' branch does not exist. Creating a new 'dev' branch..."
           git checkout -b dev
         fi
+        
+        echo "Current branch: $(git branch --show-current)"
+      env:
+        GITHUB_TOKEN: ${{ secrets.WAITTIMES_DATASETS_REPO_TOKEN }}
 
     - name: Run tool with parameters
       run: dotnet ./bin/WaitTimes.dll --build-id 261084.24.11.18.1712-0 --release 1.9 --release-marker hi_1_9_0 --database ./data/datasets/snowbound-wait-times.db --user-agent "SHIVA-2043073184/6.10025.17697.0 (release; PC)"
