@@ -1,4 +1,4 @@
-name: Windows GitHub Action Workflow
+name: Run data aggregation
 
 on:
   workflow_dispatch:
