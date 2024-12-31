@@ -57,7 +57,12 @@ jobs:
     - name: Create dev branch if it does not exist
       run: |
         cd ./data
-        git checkout -b dev || git checkout dev
+        if git rev-parse --verify dev; then
+          git checkout dev
+          git pull origin dev
+        else
+          git checkout -b dev
+        fi
 
     - name: Run tool with parameters
       run: dotnet ./bin/WaitTimes.dll --build-id 261084.24.11.18.1712-0 --release 1.9 --release-marker hi_1_9_0 --database ./data/datasets/snowbound-wait-times.db --user-agent "SHIVA-2043073184/6.10025.17697.0 (release; PC)"
