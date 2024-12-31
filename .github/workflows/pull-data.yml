@@ -33,15 +33,11 @@ jobs:
       run: |
         unzip openspartan-waittimes.zip -d bin
 
-    - name: Write access tokens to file (if exists)
+    - name: Write secret to file
       run: |
-        if [ -n "${{ secrets.ACCESS_TOKENS }}" ]; then
-          cat << EOF > ./bin/access_tokens.json
-          ${{ secrets.ACCESS_TOKENS }}
-          EOF
-        else
-          echo "ACCESS_TOKENS is empty, not writing to file."
-        fi
+        cat << EOF > ./bin/access_tokens.json
+        ${{ secrets.ACCESS_TOKENS }}
+        EOF
 
     - name: Write Xbox tokens to file (if exists)
       run: |
