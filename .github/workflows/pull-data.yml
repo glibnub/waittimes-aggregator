@@ -89,8 +89,8 @@ jobs:
         
         # Fetch the latest changes and merge them
         git fetch origin
-        git checkout dev
-        git pull origin dev
+        git checkout dev || git checkout -b dev
+        git pull origin dev || echo "Branch 'dev' did not exist, created new branch 'dev'"
         
         # Add, commit, and push changes
         git add .
