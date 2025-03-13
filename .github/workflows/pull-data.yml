@@ -78,7 +78,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.WAITTIMES_DATASETS_REPO_TOKEN }}
 
     - name: Run WaitTimes to get the latest times
-      run: dotnet ./bin/WaitTimes.dll --build-id 262282.25.01.09.1801-0 --release 1.10 --release-marker hi_1_10_0 --database ./data/datasets/blue-team-wait-times.db --user-agent "SHIVA-2043073184/6.10026.11084.0 (release; PC)"
+      run: dotnet ./bin/WaitTimes.dll --build-id 262282.25.01.09.1801-0 --release 1.10 --release-marker hi_1_10_0 --database ./data/datasets/blue-team-wait-times.db --user-agent "SHIVA-2043073184/6.10026.12282.0 (release; PC)"
 
     - name: Commit and push changes
       run: |
