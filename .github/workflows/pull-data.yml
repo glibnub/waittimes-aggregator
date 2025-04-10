@@ -78,7 +78,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.WAITTIMES_DATASETS_REPO_TOKEN }}
 
     - name: Run WaitTimes to get the latest times
-      run: dotnet ./bin/WaitTimes.dll --build-id 263096.25.02.14.0938-2 --release 1.10 --release-marker hi_1_10_0 --database ./data/datasets/forerunner-wait-times.db --user-agent "SHIVA-2043073184/6.10026.13096.0 (release; PC)"
+      run: dotnet ./bin/WaitTimes.dll --build-id 263865.25.03.19.1809-2 --release 1.10 --release-marker hi_1_10_0 --database ./data/datasets/forerunner-wait-times.db --user-agent "SHIVA-2043073184/6.10026.13865.0 (release; PC)"
 
     - name: Commit and push changes
       run: |
